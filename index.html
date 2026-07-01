@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>化学幸运盲盒 · 课堂抽奖系统</title>
+    <title>水果捕手 · 课堂抽奖</title>
     <style>
         * {
             box-sizing: border-box;
             user-select: none;
         }
 
-        /* 化学背景 */
+        /* 深色水底背景 */
         body {
             margin: 0;
             min-height: 100vh;
-            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(145deg, #0b2b3b 0%, #0a1c2a 100%);
             font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
-            padding: 20px;
+            padding: 12px;
             position: relative;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         body::before {
@@ -30,294 +30,273 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.15"><path fill="none" stroke="%23facc15" stroke-width="1.2" d="M30 80 L50 80 L55 95 L45 95 L30 80 Z M70 70 L90 70 L95 85 L75 85 L70 70 Z M120 60 L140 60 L150 80 L125 80 L120 60 Z M160 90 L175 90 L180 105 L165 105 L160 90 Z M10 140 L30 140 L35 155 L15 155 L10 140 Z"/><circle cx="45" cy="45" r="6" stroke="%23facc15" fill="none" stroke-width="1"/><circle cx="140" cy="30" r="8" stroke="%23f97316" fill="none" stroke-width="1.2"/><circle cx="180" cy="140" r="5" stroke="%23facc15" fill="none"/><path d="M90 150 L105 140 L120 150 L105 160 Z" stroke="%23f97316" fill="none" stroke-width="1"/><text x="20" y="190" font-size="16" fill="%23facc15" font-family="monospace">H₂O</text><text x="150" y="190" font-size="14" fill="%23f97316" font-family="monospace">C₆H₁₂O₆</text><text x="80" y="25" font-size="18" fill="%23facc15" font-family="monospace">⚛️</text><text x="170" y="70" font-size="22" fill="%23f97316" font-family="monospace">🧪</text></svg>');
-            background-repeat: repeat;
-            background-size: 180px 180px;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            bottom: 10%;
-            right: 5%;
-            width: 260px;
-            height: 260px;
-            border: 2px dashed rgba(250, 204, 21, 0.2);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            animation: rotateSlow 30s linear infinite;
-        }
-
-        @keyframes rotateSlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            background: radial-gradient(circle at 20% 30%, rgba(64, 224, 208, 0.08) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
         }
 
         .roulette-container {
-            max-width: 1200px;
+            max-width: 1100px;
             width: 100%;
             margin: 0 auto;
             position: relative;
             z-index: 2;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(3px);
-            border-radius: 64px;
-            padding: 24px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,215,0,0.3);
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(4px);
+            border-radius: 48px;
+            padding: 16px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.15);
+            border: 1px solid rgba(64, 224, 208, 0.25);
         }
 
         .dashboard {
-            background: #fef9e8;
-            border-radius: 48px;
-            padding: 28px 32px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+            background: rgba(255, 250, 240, 0.92);
+            border-radius: 40px;
+            padding: 18px 22px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.4);
             text-align: center;
             position: relative;
+            backdrop-filter: blur(2px);
         }
 
         h1 {
-            margin: 0 0 20px 0;
-            font-size: 2.8rem;
-            background: linear-gradient(135deg, #F59E0B, #F97316);
+            margin: 0 0 8px 0;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
             letter-spacing: 2px;
             font-weight: 800;
+            text-shadow: 0 0 20px rgba(255, 200, 0, 0.2);
         }
 
-        /* 命运揭示区域 - 顶部 */
         .result-area {
-            background: #1e293b;
-            border-radius: 56px;
-            padding: 28px 24px;
-            margin: 0 0 30px 0;
-            color: #fef9e8;
-            box-shadow: inset 0 0 0 2px #facc15, 0 8px 20px rgba(0,0,0,0.2);
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 14px 20px;
+            margin: 0 0 14px 0;
+            color: #3e2c1b;
+            box-shadow: inset 0 0 0 2px #ffb300, 0 8px 20px rgba(0,0,0,0.05);
             text-align: center;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .result-title {
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             letter-spacing: 2px;
             font-weight: 600;
-            color: #facc15;
-            margin-bottom: 12px;
+            color: #f57f17;
+            margin-bottom: 4px;
         }
 
         .result-message {
-            font-size: 2.2rem;
+            font-size: 1.6rem;
             font-weight: bold;
-            margin: 8px 0;
+            margin: 2px 0;
             word-break: break-word;
             line-height: 1.3;
+            color: #1e2a3a;
         }
 
-        /* 能量池与福利并排 */
         .info-welfare-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 28px;
-            margin-bottom: 35px;
+            gap: 16px;
+            margin-bottom: 14px;
             justify-content: center;
             align-items: stretch;
         }
 
-        .card {
-            background: white;
-            border-radius: 40px;
-            padding: 22px 20px;
+        .card, .welfare-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 32px;
+            padding: 12px 16px;
             flex: 1;
-            min-width: 240px;
-            max-width: 320px;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
-            border: 1px solid #ffe4c4;
+            min-width: 160px;
+            max-width: 260px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+            border: 1px solid #ffe0b2;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .card-label {
-            font-size: 1rem;
+        .card-label, .welfare-label {
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             font-weight: 700;
-            color: #f97316;
+            color: #e65100;
         }
 
         .card-value {
-            font-size: 3.4rem;
+            font-size: 2.6rem;
             font-weight: 800;
-            color: #1e293b;
+            color: #bf360c;
             line-height: 1;
-            margin: 12px 0 6px;
+            margin: 4px 0 2px;
         }
 
         .card-tip {
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-
-        .welfare-card {
-            background: white;
-            border-radius: 40px;
-            padding: 22px 20px;
-            flex: 1;
-            min-width: 240px;
-            max-width: 320px;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
-            border: 1px solid #ffe4c4;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .welfare-label {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 700;
-            color: #f97316;
+            font-size: 0.7rem;
+            color: #795548;
         }
 
         .welfare-status {
-            font-size: 1.3rem;
+            font-size: 1.0rem;
             font-weight: bold;
-            margin: 12px 0;
-            color: #7c2d12;
+            margin: 4px 0;
+            color: #4e342e;
             line-height: 1.3;
         }
 
-        .lottery-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px 0 30px;
+        /* 游戏区 - 高度保持较大 */
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            background: radial-gradient(ellipse at center bottom, #fff8e1, #ffecb3);
+            border-radius: 32px;
+            margin: 12px 0 0;
+            overflow: hidden;
+            border: 2px solid #ffb300;
+            box-shadow: inset 0 0 60px rgba(255, 200, 0, 0.15);
+            cursor: pointer;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 235, 59, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 152, 0, 0.08) 0%, transparent 50%);
         }
 
-        .spin-btn {
-            background: radial-gradient(circle at 30% 10%, #f97316, #ea580c);
-            border: none;
-            width: 240px;
-            height: 240px;
-            border-radius: 50%;
-            font-size: 2.4rem;
+        /* 水果元素 - 进一步放大 */
+        .fruit {
+            position: absolute;
+            font-size: 4.5rem;
             font-weight: bold;
             color: white;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 2px 8px rgba(0,0,0,0.1);
             cursor: pointer;
-            box-shadow: 0 20px 35px rgba(234,88,12,0.4), inset 0 1px 4px rgba(255,255,200,0.8);
-            transition: transform 0.1s ease;
+            transition: transform 0.1s;
+            will-change: transform, left, top;
+            pointer-events: auto;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-family: inherit;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), transparent 70%);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.3);
+            z-index: 5;
+            user-select: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .fruit:hover {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px #ffb300);
+        }
+        .fruit:active {
+            transform: scale(0.85);
         }
 
-        .spin-btn:active {
-            transform: scale(0.96);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 80%);
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 0.6; }
+            100% { transform: translateY(-600px) scale(1.2); opacity: 0; }
         }
 
         .control-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 15px;
+            display: none;
         }
 
-        .btn-sm {
-            background: #f1f5f9;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 60px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.1s;
-            font-size: 0.95rem;
+        .float-text {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ff6f00;
+            text-shadow: 0 0 20px rgba(255, 200, 0, 0.8);
+            z-index: 999;
+            animation: floatUpText 1.2s ease-out forwards;
+        }
+        @keyframes floatUpText {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-120px) scale(1.4); }
         }
 
-        .btn-sm:active {
-            transform: scale(0.96);
-        }
-
-        .btn-warning {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .chem-decoration {
+        .fruit-decoration {
             position: fixed;
             bottom: 20px;
             left: 20px;
-            font-size: 58px;
-            opacity: 0.2;
+            font-size: 48px;
+            opacity: 0.15;
             pointer-events: none;
             z-index: 1;
             font-family: monospace;
         }
 
+        /* 烟花画布 - 全屏覆盖，透明背景，禁止点击穿透 */
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            display: block;
+        }
+
         @media (max-width: 700px) {
-            .dashboard {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            .result-message {
-                font-size: 1.6rem;
-            }
-            .card-value {
-                font-size: 2.4rem;
-            }
-            .welfare-status {
-                font-size: 1rem;
-            }
-            .spin-btn {
-                width: 180px;
-                height: 180px;
-                font-size: 1.8rem;
-            }
-            .info-welfare-row {
-                gap: 16px;
-            }
-            body::after {
-                width: 150px;
-                height: 150px;
-                bottom: 2%;
-            }
+            .dashboard { padding: 12px 14px; }
+            h1 { font-size: 1.8rem; }
+            .result-message { font-size: 1.2rem; }
+            .card-value { font-size: 2.0rem; }
+            .welfare-status { font-size: 0.9rem; }
+            .game-area { height: 380px; }
+            .fruit { font-size: 3.2rem; width: 84px; height: 84px; }
+        }
+        @media (min-width: 1200px) {
+            .game-area { height: 560px; }
+            .fruit { font-size: 5.0rem; width: 130px; height: 130px; }
         }
     </style>
 </head>
 <body>
-<div class="chem-decoration">🧪⚗️🔬🧫</div>
+<div class="fruit-decoration">🍎🍊🍋🍇🍉🍓🍑🍒🥝🍍</div>
+<!-- 烟花 Canvas -->
+<canvas id="fireworksCanvas"></canvas>
 <div class="roulette-container">
     <div class="dashboard">
-        <h1>化学幸运盲盒</h1>
+        <h1>水果捕手</h1>
 
-        <!-- 命运揭示区域（顶部） -->
         <div class="result-area">
-            <div class="result-title">✨ 命运揭示 ✨</div>
-            <div class="result-message" id="resultMsg">🧪 点击盲盒，抽取化学奇遇！</div>
+            <div class="result-title">🎣 捕获成果</div>
+            <div class="result-message" id="resultMsg">点击游动的水果，捕获惊喜！</div>
         </div>
 
-        <!-- 能量池 & 集体福利（并排） -->
         <div class="info-welfare-row">
             <div class="card">
                 <div class="card-label">🏆 班级能量池</div>
                 <div class="card-value" id="classPoints">0</div>
-                <div class="card-tip">每抽奖获得能量，累积解锁福利</div>
+                <div class="card-tip">每次捕获获得能量</div>
             </div>
             <div class="welfare-card">
                 <div class="welfare-label">🎁 集体福利</div>
@@ -325,191 +304,371 @@
             </div>
         </div>
 
-        <!-- 抽奖核心区 -->
-        <div class="lottery-area">
-            <button class="spin-btn" id="spinBtn">
-                🎡 抽 我 🎡
-            </button>
+        <div class="game-area" id="gameArea">
+            <!-- 气泡由JS动态生成 -->
         </div>
 
-        <!-- 控制按钮 -->
-        <div class="control-buttons">
-            <button class="btn-sm" id="resetPointsBtn">🔄 重置能量池</button>
-            <button class="btn-sm btn-warning" id="fullResetBtn">⚠️ 全局重置</button>
-        </div>
+        <div style="height:4px;"></div>
+        <div class="control-buttons"></div>
     </div>
 </div>
 
 <script>
-    // ----------------------------- 奖池配置 ---------------------------------
-    // 特等奖概率 0.2% (权重0.2)，其余17项均分剩余99.8% (每个权重约5.870588)
-    // 所有奖项 delta = 10（加10能量）
+    // ===================== 奖池配置 =====================
     const PRIZES = [
-        {   // 特等奖 权重0.2
-            weight: 0.2,
-            text: "🎉 天选之人！本组免今天作业 🎉",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "✨ 好事成双 双数组+200 ✨",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "✨ 患难与共😭 与最低分组同分 ✨",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "✨ 置换反应😄 与最高分组交换 ✨",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🍭 获得零食一份 🍭",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "📚 组员每人一份百炼成钢！ 📚",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 大声说出：我爱化学，化学使我快乐 🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "⭐ 模仿一种动物叫声，全班乐翻天！（小组+100分） ⭐",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 复分解反应 指定一组分数与本组交换 🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 取长补短 最高分-200，最低分+200 🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 分解反应 其他组-100分 🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 化合反应 抽取其他组各100分 🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 好风凭借力 与最高分同分 🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 单刀直入 单数组+200 🎁",
-            delta: 10
-        },
-        // 新增三个奖项
-        {
-            weight: 5.870588,
-            text: "🎁 欧皇附体 小组分数×2 🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 指定一组+200分（本组除外）🎁",
-            delta: 10
-        },
-        {
-            weight: 5.870588,
-            text: "🎁 指定一组-200分（本组除外）🎁",
-            delta: 10
-        }
+        { weight: 0.2, text: "🎉 天选之人！本组免今天作业 🎉", delta: 10 },
+        { weight: 5.870588, text: "✨ 好事成双 双数组+200 ✨", delta: 10 },
+        { weight: 5.870588, text: "✨ 患难与共😭 与最低分组同分 ✨", delta: 10 },
+        { weight: 5.870588, text: "✨ 置换反应😄 与最高分组交换 ✨", delta: 10 },
+        { weight: 5.870588, text: "🍭 获得零食一份 🍭", delta: 10 },
+        { weight: 5.870588, text: "📚 组员每人一份百炼成钢！ 📚", delta: 10 },
+        { weight: 5.870588, text: "🎁 大声说出：我爱化学，化学使我快乐 🎁", delta: 10 },
+        { weight: 5.870588, text: "⭐ 模仿一种动物叫声，全班乐翻天！（小组+100分） ⭐", delta: 10 },
+        { weight: 5.870588, text: "🎁 复分解反应 指定一组分数与本组交换 🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 取长补短 最高分-200，最低分+200 🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 分解反应 其他组-100分 🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 化合反应 抽取其他组各100分 🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 好风凭借力 与最高分同分 🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 单刀直入 单数组+200 🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 欧皇附体 小组分数×2 🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 指定一组+200分（本组除外）🎁", delta: 10 },
+        { weight: 5.870588, text: "🎁 指定一组-200分（本组除外）🎁", delta: 10 }
     ];
 
-    // 根据权重随机抽取
     function selectPrize() {
-        const totalWeight = PRIZES.reduce((sum, p) => sum + p.weight, 0);
-        let rand = Math.random() * totalWeight;
-        let accumulator = 0;
-        for (let i = 0; i < PRIZES.length; i++) {
-            accumulator += PRIZES[i].weight;
-            if (rand < accumulator) return PRIZES[i];
+        const total = PRIZES.reduce((s, p) => s + p.weight, 0);
+        let r = Math.random() * total, acc = 0;
+        for (let p of PRIZES) {
+            acc += p.weight;
+            if (r < acc) return p;
         }
         return PRIZES[0];
     }
 
-    // 全局状态
+    // ===================== 全局状态 =====================
     let classEnergy = 0;
-
-    // DOM 元素
+    let welfareTriggered = false;  // 标记是否已触发福利烟花雨
+    const gameArea = document.getElementById('gameArea');
     const classPointsSpan = document.getElementById('classPoints');
-    const spinBtn = document.getElementById('spinBtn');
     const resultMsgDiv = document.getElementById('resultMsg');
     const welfareStatusDiv = document.getElementById('welfareStatus');
 
-    // 更新UI
+    // ===================== 游动水果管理 =====================
+    let fruitElements = [];
+    let animationId = null;
+    const FRUIT_COUNT = 12;
+    const fruitEmojis = ['🍎', '🍊', '🍋', '🍇', '🍉', '🍓', '🍑', '🍒', '🥝', '🍍'];
+
+    function createFruit() {
+        const el = document.createElement('div');
+        el.className = 'fruit';
+        const content = fruitEmojis[Math.floor(Math.random() * fruitEmojis.length)];
+        el.textContent = content;
+        const w = gameArea.clientWidth || 600;
+        const h = gameArea.clientHeight || 520;
+        const size = 120;
+        const left = Math.random() * (w - size);
+        const top = Math.random() * (h - size);
+        el.style.left = left + 'px';
+        el.style.top = top + 'px';
+        const speed = 1.2 + Math.random() * 2.0;
+        const angle = Math.random() * 2 * Math.PI;
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+        el.dataset.vx = vx;
+        el.dataset.vy = vy;
+        const scale = 0.85 + Math.random() * 0.4;
+        el.style.fontSize = (4.5 * scale) + 'rem';
+        el.style.width = (120 * scale) + 'px';
+        el.style.height = (120 * scale) + 'px';
+        el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleCatch(el, e);
+        });
+        gameArea.appendChild(el);
+        return el;
+    }
+
+    function handleCatch(el, event) {
+        if (el.dataset.catching === 'true') return;
+        el.dataset.catching = 'true';
+        const prize = selectPrize();
+        const isJackpot = prize.text.includes('天选之人');
+        classEnergy += prize.delta;
+        if (classEnergy < 0) classEnergy = 0;
+        updateUI();
+        let msg = prize.text;
+        if (isJackpot) {
+            msg = '🏆 ' + prize.text + ' 🏆';
+            // 特等奖触发盛大烟花
+            triggerFireworks(event.clientX, event.clientY, 3);
+        } else {
+            // 普通奖触发小型烟花
+            triggerFireworks(event.clientX, event.clientY, 1);
+        }
+        resultMsgDiv.innerHTML = msg;
+        showFloatText(event.clientX, event.clientY, '🍭 +' + prize.delta + '能量');
+        el.remove();
+        const idx = fruitElements.indexOf(el);
+        if (idx !== -1) fruitElements.splice(idx, 1);
+        setTimeout(() => {
+            if (fruitElements.length < FRUIT_COUNT) {
+                const newFruit = createFruit();
+                fruitElements.push(newFruit);
+            }
+        }, 300);
+    }
+
+    function showFloatText(x, y, text) {
+        const el = document.createElement('div');
+        el.className = 'float-text';
+        el.textContent = text;
+        el.style.left = (x - 60) + 'px';
+        el.style.top = (y - 30) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1300);
+    }
+
+    function updateFruits() {
+        const w = gameArea.clientWidth || 600;
+        const h = gameArea.clientHeight || 520;
+        const size = 120;
+        for (let el of fruitElements) {
+            let left = parseFloat(el.style.left) || 0;
+            let top = parseFloat(el.style.top) || 0;
+            let vx = parseFloat(el.dataset.vx) || 1;
+            let vy = parseFloat(el.dataset.vy) || 1;
+            left += vx;
+            top += vy;
+            if (left <= 0 || left + size >= w) { vx = -vx; left = Math.max(0, Math.min(w - size, left)); }
+            if (top <= 0 || top + size >= h) { vy = -vy; top = Math.max(0, Math.min(h - size, top)); }
+            el.style.left = left + 'px';
+            el.style.top = top + 'px';
+            el.dataset.vx = vx;
+            el.dataset.vy = vy;
+            const rotate = (vx * 0.8) + 'deg';
+            el.style.transform = `rotate(${rotate})`;
+        }
+        animationId = requestAnimationFrame(updateFruits);
+    }
+
+    function initFruits() {
+        for (let el of fruitElements) el.remove();
+        fruitElements = [];
+        for (let i = 0; i < FRUIT_COUNT; i++) {
+            const fruit = createFruit();
+            fruitElements.push(fruit);
+        }
+        if (animationId) cancelAnimationFrame(animationId);
+        updateFruits();
+    }
+
+    function createBubbles() {
+        const area = gameArea;
+        for (let i = 0; i < 14; i++) {
+            const b = document.createElement('div');
+            b.className = 'bubble';
+            const size = 8 + Math.random() * 30;
+            b.style.width = size + 'px';
+            b.style.height = size + 'px';
+            b.style.left = Math.random() * 100 + '%';
+            b.style.bottom = '-20px';
+            b.style.animationDuration = (8 + Math.random() * 12) + 's';
+            b.style.animationDelay = (Math.random() * 10) + 's';
+            area.appendChild(b);
+        }
+    }
+
+    // ===================== 烟花特效（支持规模参数） =====================
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
+    let fireworksActive = false;
+    let particles = [];
+    let animFrame = null;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor(x, y, color, vx, vy, radius, life) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.vx = vx;
+            this.vy = vy;
+            this.radius = radius;
+            this.life = life;
+            this.maxLife = life;
+            this.alpha = 1;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vy += 0.06; // 重力
+            this.life--;
+            this.alpha = this.life / this.maxLife;
+            this.radius *= 0.995;
+        }
+        draw(ctx) {
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.shadowColor = this.color;
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+    }
+
+    function triggerFireworks(x, y, scale = 1) {
+        // 如果已有烟花，先停止（保留当前粒子，但停止旧的生成？实际上我们不停，让它们叠加）
+        // 但为了性能，如果已有大量粒子，可以适当限制，但这里不处理。
+        const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6bd6', '#ff9f43', '#a29bfe', '#fd79a8', '#fdcb6e', '#00cec9'];
+        const clusterCount = Math.floor(3 * scale);
+        const baseParticles = 60 * scale;
+        for (let c = 0; c < clusterCount; c++) {
+            const cx = x + (Math.random() - 0.5) * 200 * scale;
+            const cy = y + (Math.random() - 0.5) * 200 * scale;
+            const count = baseParticles + Math.floor(Math.random() * 20 * scale);
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const speed = 2 + Math.random() * 5 * scale;
+                const vx = Math.cos(angle) * speed;
+                const vy = Math.sin(angle) * speed - 1;
+                const radius = 2 + Math.random() * 4 * (scale > 1 ? 1.2 : 1);
+                const life = 50 + Math.random() * 50;
+                particles.push(new Particle(cx, cy, color, vx, vy, radius, life));
+            }
+        }
+        if (scale > 1) {
+            for (let i = 0; i < 30 * scale; i++) {
+                const cx = x + (Math.random() - 0.5) * 200 * scale;
+                const cy = y + (Math.random() - 0.5) * 200 * scale;
+                const angle = Math.random() * 2 * Math.PI;
+                const speed = 3 + Math.random() * 6 * scale;
+                const vx = Math.cos(angle) * speed;
+                const vy = Math.sin(angle) * speed - 2;
+                particles.push(new Particle(cx, cy, '#ffd700', vx, vy, 2 + Math.random() * 3, 40 + Math.random() * 30));
+            }
+        }
+        if (!fireworksActive) {
+            fireworksActive = true;
+            animateFireworks();
+        }
+    }
+
+    // ===================== 烟花雨（集体福利解锁） =====================
+    let rainInterval = null;
+
+    function triggerFireworkRain() {
+        if (rainInterval) return; // 已存在则忽略
+        const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6bd6', '#ff9f43', '#a29bfe', '#fd79a8', '#fdcb6e', '#00cec9'];
+        let totalParticles = 0;
+        const maxParticles = 400; // 总粒子数限制，避免性能问题
+        rainInterval = setInterval(() => {
+            for (let i = 0; i < 18; i++) {
+                const x = Math.random() * canvas.width;
+                const y = -10;
+                const vx = (Math.random() - 0.5) * 2.5;
+                const vy = 2 + Math.random() * 5;
+                const radius = 3 + Math.random() * 6;
+                const life = 80 + Math.random() * 70;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particles.push(new Particle(x, y, color, vx, vy, radius, life));
+                totalParticles++;
+            }
+            if (totalParticles >= maxParticles) {
+                clearInterval(rainInterval);
+                rainInterval = null;
+            }
+        }, 40); // 每40ms生成一批
+
+        // 启动动画
+        if (!fireworksActive) {
+            fireworksActive = true;
+            animateFireworks();
+        }
+        // 3秒后强制停止生成（但粒子继续下落）
+        setTimeout(() => {
+            if (rainInterval) {
+                clearInterval(rainInterval);
+                rainInterval = null;
+            }
+        }, 3000);  // 改为3秒
+    }
+
+    function animateFireworks() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.update();
+            if (p.life <= 0 || p.radius <= 0.2) {
+                particles.splice(i, 1);
+                continue;
+            }
+            p.draw(ctx);
+            alive = true;
+        }
+        if (alive) {
+            animFrame = requestAnimationFrame(animateFireworks);
+        } else {
+            fireworksActive = false;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            cancelAnimationFrame(animFrame);
+        }
+    }
+
+    // ===================== UI更新 =====================
     function updateUI() {
         classPointsSpan.innerText = classEnergy;
-        
         if (classEnergy >= 50) {
             welfareStatusDiv.innerHTML = "🎉 神秘奖励一份！ 📚<br>✨ 集体福利已生效 ✨";
+            if (!welfareTriggered) {
+                welfareTriggered = true;
+                triggerFireworkRain();
+            }
         } else {
+            welfareTriggered = false; // 重置以便下次触发
             welfareStatusDiv.innerHTML = `🔒 需要 ${50 - classEnergy} 点能量解锁<br>“神秘奖励一份”`;
         }
     }
 
-    // 抽奖
-    function performLottery() {
-        const prize = selectPrize();
-        const pointsDelta = prize.delta;
-        let showMessage = prize.text;
-
-        if (pointsDelta !== 0) {
-            classEnergy += pointsDelta;
-            if (classEnergy < 0) classEnergy = 0;
-        }
-
-        // 特等奖加个前缀突出
-        if (prize.text.includes("天选之人")) {
-            showMessage = "🏆 " + prize.text + " 🏆";
-        }
-
-        resultMsgDiv.innerHTML = showMessage;
+    // ===================== 初始化 =====================
+    window.onload = function() {
+        const area = gameArea;
+        area.style.width = '100%';
+        let targetHeight = 520;
+        if (window.innerHeight < 700) targetHeight = 380;
+        if (window.innerWidth > 1200) targetHeight = 560;
+        area.style.height = targetHeight + 'px';
+        createBubbles();
+        initFruits();
         updateUI();
-    }
 
-    // 重置能量池
-    function resetPoints() {
-        classEnergy = 0;
-        updateUI();
-        resultMsgDiv.innerHTML = "🏦 班级能量池已归零。继续抽奖累积吧！";
-    }
-
-    // 全局重置
-    function fullReset() {
-        classEnergy = 0;
-        updateUI();
-        resultMsgDiv.innerHTML = "✨ 全局重置完成！班级能量池已归零 ✨";
-    }
-
-    function init() {
-        updateUI();
-        spinBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            performLottery();
+        window.addEventListener('resize', () => {
+            let newH = 520;
+            if (window.innerHeight < 700) newH = 380;
+            if (window.innerWidth > 1200) newH = 560;
+            if (area.clientHeight !== newH) {
+                area.style.height = newH + 'px';
+                initFruits();
+            }
         });
-        document.getElementById('resetPointsBtn').addEventListener('click', resetPoints);
-        document.getElementById('fullResetBtn').addEventListener('click', fullReset);
-    }
-    
-    init();
+    };
+
+    window.addEventListener('beforeunload', function() {
+        if (animationId) cancelAnimationFrame(animationId);
+        if (animFrame) cancelAnimationFrame(animFrame);
+        if (rainInterval) clearInterval(rainInterval);
+    });
 </script>
 </body>
 </html>

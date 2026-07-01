@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>化学幸运盲盒 · 课堂抽奖系统</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        /* 化学背景 */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.15"><path fill="none" stroke="%23facc15" stroke-width="1.2" d="M30 80 L50 80 L55 95 L45 95 L30 80 Z M70 70 L90 70 L95 85 L75 85 L70 70 Z M120 60 L140 60 L150 80 L125 80 L120 60 Z M160 90 L175 90 L180 105 L165 105 L160 90 Z M10 140 L30 140 L35 155 L15 155 L10 140 Z"/><circle cx="45" cy="45" r="6" stroke="%23facc15" fill="none" stroke-width="1"/><circle cx="140" cy="30" r="8" stroke="%23f97316" fill="none" stroke-width="1.2"/><circle cx="180" cy="140" r="5" stroke="%23facc15" fill="none"/><path d="M90 150 L105 140 L120 150 L105 160 Z" stroke="%23f97316" fill="none" stroke-width="1"/><text x="20" y="190" font-size="16" fill="%23facc15" font-family="monospace">H₂O</text><text x="150" y="190" font-size="14" fill="%23f97316" font-family="monospace">C₆H₁₂O₆</text><text x="80" y="25" font-size="18" fill="%23facc15" font-family="monospace">⚛️</text><text x="170" y="70" font-size="22" fill="%23f97316" font-family="monospace">🧪</text></svg>');
+            background-repeat: repeat;
+            background-size: 180px 180px;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            bottom: 10%;
+            right: 5%;
+            width: 260px;
+            height: 260px;
+            border: 2px dashed rgba(250, 204, 21, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: rotateSlow 30s linear infinite;
+        }
+
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .roulette-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(3px);
+            border-radius: 64px;
+            padding: 24px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .dashboard {
+            background: #fef9e8;
+            border-radius: 48px;
+            padding: 28px 32px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #F59E0B, #F97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        /* 命运揭示区域 - 顶部 */
+        .result-area {
+            background: #1e293b;
+            border-radius: 56px;
+            padding: 28px 24px;
+            margin: 0 0 30px 0;
+            color: #fef9e8;
+            box-shadow: inset 0 0 0 2px #facc15, 0 8px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #facc15;
+            margin-bottom: 12px;
+        }
+
+        .result-message {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 8px 0;
+            word-break: break-word;
+            line-height: 1.3;
+        }
+
+        /* 能量池与福利并排 */
+        .info-welfare-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            margin-bottom: 35px;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        .card {
+            background: white;
+            border-radius: 40px;
+            padding: 22px 20px;
+            flex: 1;
+            min-width: 240px;
+            max-width: 320px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            border: 1px solid #ffe4c4;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: #f97316;
+        }
+
+        .card-value {
+            font-size: 3.4rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+            margin: 12px 0 6px;
+        }
+
+        .card-tip {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .welfare-card {
+            background: white;
+            border-radius: 40px;
+            padding: 22px 20px;
+            flex: 1;
+            min-width: 240px;
+            max-width: 320px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            border: 1px solid #ffe4c4;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welfare-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: #f97316;
+        }
+
+        .welfare-status {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 12px 0;
+            color: #7c2d12;
+            line-height: 1.3;
+        }
+
+        .lottery-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0 30px;
+        }
+
+        .spin-btn {
+            background: radial-gradient(circle at 30% 10%, #f97316, #ea580c);
+            border: none;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            font-size: 2.4rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 20px 35px rgba(234,88,12,0.4), inset 0 1px 4px rgba(255,255,200,0.8);
+            transition: transform 0.1s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .spin-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+        }
+
+        .control-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .btn-sm {
+            background: #f1f5f9;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 0.95rem;
+        }
+
+        .btn-sm:active {
+            transform: scale(0.96);
+        }
+
+        .btn-warning {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .chem-decoration {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 58px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+            font-family: monospace;
+        }
+
+        @media (max-width: 700px) {
+            .dashboard {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .result-message {
+                font-size: 1.6rem;
+            }
+            .card-value {
+                font-size: 2.4rem;
+            }
+            .welfare-status {
+                font-size: 1rem;
+            }
+            .spin-btn {
+                width: 180px;
+                height: 180px;
+                font-size: 1.8rem;
+            }
+            .info-welfare-row {
+                gap: 16px;
+            }
+            body::after {
+                width: 150px;
+                height: 150px;
+                bottom: 2%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="chem-decoration">🧪⚗️🔬🧫</div>
+<div class="roulette-container">
+    <div class="dashboard">
+        <h1>化学幸运盲盒</h1>
+
+        <!-- 命运揭示区域（顶部） -->
+        <div class="result-area">
+            <div class="result-title">✨ 命运揭示 ✨</div>
+            <div class="result-message" id="resultMsg">🧪 点击盲盒，抽取化学奇遇！</div>
+        </div>
+
+        <!-- 能量池 & 集体福利（并排） -->
+        <div class="info-welfare-row">
+            <div class="card">
+                <div class="card-label">🏆 班级能量池</div>
+                <div class="card-value" id="classPoints">0</div>
+                <div class="card-tip">每抽奖获得能量，累积解锁福利</div>
+            </div>
+            <div class="welfare-card">
+                <div class="welfare-label">🎁 集体福利</div>
+                <div class="welfare-status" id="welfareStatus">🔒 需要50能量解锁</div>
+            </div>
+        </div>
+
+        <!-- 抽奖核心区 -->
+        <div class="lottery-area">
+            <button class="spin-btn" id="spinBtn">
+                🎡 抽 我 🎡
+            </button>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="control-buttons">
+            <button class="btn-sm" id="resetPointsBtn">🔄 重置能量池</button>
+            <button class="btn-sm btn-warning" id="fullResetBtn">⚠️ 全局重置</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ----------------------------- 奖池配置 ---------------------------------
+    // 特等奖概率 0.2% (权重0.2)，其余17项均分剩余99.8% (每个权重约5.870588)
+    // 所有奖项 delta = 10（加10能量）
+    const PRIZES = [
+        {   // 特等奖 权重0.2
+            weight: 0.2,
+            text: "🎉 天选之人！本组免今天作业 🎉",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "✨ 好事成双 双数组+200 ✨",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "✨ 患难与共😭 与最低分组同分 ✨",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "✨ 置换反应😄 与最高分组交换 ✨",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🍭 获得零食一份 🍭",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "📚 组员每人一份百炼成钢！ 📚",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 大声说出：我爱化学，化学使我快乐 🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "⭐ 模仿一种动物叫声，全班乐翻天！（小组+100分） ⭐",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 复分解反应 指定一组分数与本组交换 🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 取长补短 最高分-200，最低分+200 🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 分解反应 其他组-100分 🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 化合反应 抽取其他组各100分 🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 好风凭借力 与最高分同分 🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 单刀直入 单数组+200 🎁",
+            delta: 10
+        },
+        // 新增三个奖项
+        {
+            weight: 5.870588,
+            text: "🎁 欧皇附体 小组分数×2 🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 指定一组+200分（本组除外）🎁",
+            delta: 10
+        },
+        {
+            weight: 5.870588,
+            text: "🎁 指定一组-200分（本组除外）🎁",
+            delta: 10
+        }
+    ];
+
+    // 根据权重随机抽取
+    function selectPrize() {
+        const totalWeight = PRIZES.reduce((sum, p) => sum + p.weight, 0);
+        let rand = Math.random() * totalWeight;
+        let accumulator = 0;
+        for (let i = 0; i < PRIZES.length; i++) {
+            accumulator += PRIZES[i].weight;
+            if (rand < accumulator) return PRIZES[i];
+        }
+        return PRIZES[0];
+    }
+
+    // 全局状态
+    let classEnergy = 0;
+
+    // DOM 元素
+    const classPointsSpan = document.getElementById('classPoints');
+    const spinBtn = document.getElementById('spinBtn');
+    const resultMsgDiv = document.getElementById('resultMsg');
+    const welfareStatusDiv = document.getElementById('welfareStatus');
+
+    // 更新UI
+    function updateUI() {
+        classPointsSpan.innerText = classEnergy;
+        
+        if (classEnergy >= 50) {
+            welfareStatusDiv.innerHTML = "🎉 神秘奖励一份！ 📚<br>✨ 集体福利已生效 ✨";
+        } else {
+            welfareStatusDiv.innerHTML = `🔒 需要 ${50 - classEnergy} 点能量解锁<br>“神秘奖励一份”`;
+        }
+    }
+
+    // 抽奖
+    function performLottery() {
+        const prize = selectPrize();
+        const pointsDelta = prize.delta;
+        let showMessage = prize.text;
+
+        if (pointsDelta !== 0) {
+            classEnergy += pointsDelta;
+            if (classEnergy < 0) classEnergy = 0;
+        }
+
+        // 特等奖加个前缀突出
+        if (prize.text.includes("天选之人")) {
+            showMessage = "🏆 " + prize.text + " 🏆";
+        }
+
+        resultMsgDiv.innerHTML = showMessage;
+        updateUI();
+    }
+
+    // 重置能量池
+    function resetPoints() {
+        classEnergy = 0;
+        updateUI();
+        resultMsgDiv.innerHTML = "🏦 班级能量池已归零。继续抽奖累积吧！";
+    }
+
+    // 全局重置
+    function fullReset() {
+        classEnergy = 0;
+        updateUI();
+        resultMsgDiv.innerHTML = "✨ 全局重置完成！班级能量池已归零 ✨";
+    }
+
+    function init() {
+        updateUI();
+        spinBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            performLottery();
+        });
+        document.getElementById('resetPointsBtn').addEventListener('click', resetPoints);
+        document.getElementById('fullResetBtn').addEventListener('click', fullReset);
+    }
+    
+    init();
+</script>
+</body>
+</html>
